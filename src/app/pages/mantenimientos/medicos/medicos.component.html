@@ -1,0 +1,74 @@
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- This is some text within a card block. -->
+
+                <input #txtTermino (keyup)="buscar(txtTermino.value)" type="text" class="form-control" placeholder="Buscar usuario...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="cargando" class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="alert alert-success text-center" role="alert">
+            <h4 class="alert-heading">Cargando</h4>
+            <i class="fa fa-spin fas fa-sync-alt fa-2x"></i>
+            <p class="mb-0"> Por favor espere...</p>
+        </div>
+    </div>
+
+
+</div>
+<div class="row" *ngIf="!cargando">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-8">
+                        <h4 class="card-title">Médicos - ({{medicos.length}}) </h4>
+                        <h6 class="card-subtitle">Médicos registrados en la apliación</h6>
+                    </div>
+
+                    <div class="col">
+                        <div class="text-right">
+                            <a routerLink="/dashboard/medico/nuevo" class="btn btn-success">
+                                <i class="fa fa-hospital-o"></i> Crear Médico
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="w100">Foto</th>
+                                <th>Nombre</th>
+                                <th class="text-nowrap">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let medico of medicos">
+                                <img (click)="abrirModal(medico)" class="avatar pointer" [src]="medico.img | imagen:'medicos'" [alt]="medico.nombre">
+                                <td> {{ medico.nombre }} </td>
+
+                                <td class="w100 text-center text-nowrap">
+                                    <a [routerLink]="['/dashboard/medico', medico._id]" data-toggle="tooltip" data-original-title="Editar"> <i class="fa fa-pencil m-r-10"></i> </a>
+                                    <a (click)="borraMedico(medico)" data-toggle="tooltip" data-original-title="Borrar"> <i class="fa fa-close text-danger text-center pointer"></i> </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button class="btn btn-secondary">Siguientes</button> &nbsp;
+                <button class="btn btn-secondary">Anterior</button>
+            </div>
+        </div>
+    </div>
+</div>
