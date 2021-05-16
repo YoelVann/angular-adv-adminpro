@@ -49,6 +49,15 @@ export class UsuarioService {
       }
     }
   }
+
+  get role(): 'ADMIN_ROLE' | 'USER_ROLE' {
+  return this.usuario.role;
+  }
+  
+  guardarLocalStorage(token: string, menu: any) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
+  }
   googleInit() {
 
     return new Promise<void>( resolve => {
@@ -67,6 +76,7 @@ export class UsuarioService {
 
   logOut() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
     
     this.auth2.signOut().then(() => {
 
@@ -90,8 +100,8 @@ export class UsuarioService {
 
         this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
         
-        localStorage.setItem('token', resp.token);
-        
+        this.guardarLocalStorage(resp.token, resp.menu);
+
         return true;
       }),
       catchError( error => of(false) )
@@ -104,7 +114,7 @@ export class UsuarioService {
     .pipe(
       tap(
         (resp:any) => {
-          localStorage.setItem('token', resp.token)
+          this.guardarLocalStorage(resp.token, resp.menu);
         }
       )
     );
@@ -128,7 +138,7 @@ export class UsuarioService {
       .pipe(
         tap(
           (resp:any) => {
-            localStorage.setItem('token', resp.token)
+            this.guardarLocalStorage(resp.token, resp.menu);
           }
         )
       );
@@ -141,7 +151,7 @@ export class UsuarioService {
       .pipe(
         tap(
           (resp:any) => {
-            localStorage.setItem('token', resp.token)
+            this.guardarLocalStorage(resp.token, resp.menu);
           }
         )
       );
@@ -174,6 +184,6 @@ export class UsuarioService {
   }
 
   guardarUsuario(usuario: Usuario) {      
-      return this.http.put(`${base_url}/usuarios/${ this.uid }`, usuario, this.headers);
+      return this.http.put(`${base_url}/usuarios/${ usuario.uid }`, usuario, this.headers);
   }
 }
